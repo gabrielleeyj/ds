@@ -1,5 +1,3 @@
-use tokio_postgres::NoTls;
-use tokio_postgres::Client;
 use warp::{Filter, Rejection};
 
 mod users;
@@ -22,10 +20,10 @@ async fn main() {
 
     // Setup db connection
     let (client, connection) = 
-        tokio_postgres::connect("host=localhost port=8080 user=username password=password dbname=dsdb", NoTls).await.unwrap();
+        tokio_postgres::connect("host=localhost port=8080 user=username password=password dbname=dsdb", notls).await.unwrap();
 
     tokio::spawn(async move {
-        if let Err(e) = connection.await {
+        if let err(e) = connection.await {
             eprintln!("connection error: {}", e);
         }
     });
