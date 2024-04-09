@@ -1,4 +1,6 @@
 use warp::{Filter, Rejection};
+use tokio_postgres::Client;
+use std::env;
 
 mod users;
 use users::*;
@@ -17,17 +19,6 @@ async fn main() {
         env::set_var("RUST_LOG", "dsdb=info");
     }
     pretty_env_logger::init();
-
-    // Setup db connection
-    let (client, connection) = 
-        tokio_postgres::connect("host=localhost port=8080 user=username password=password dbname=dsdb", notls).await.unwrap();
-
-    tokio::spawn(async move {
-        if let err(e) = connection.await {
-            eprintln!("connection error: {}", e);
-        }
-    });
-
     // Define a warp filter
     //let api = warp::path("api")
         //.and(warp::path("data"))
